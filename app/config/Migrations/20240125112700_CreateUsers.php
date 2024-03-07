@@ -10,6 +10,7 @@ class CreateUsers extends AbstractMigration
               ->addColumn('password', 'string', ['limit' => 255])
               ->addColumn('created_at', 'datetime')
               ->addColumn('updated_at', 'datetime')
+              ->addColumn('token', 'string', ['null' => true])
               ->create();
     }
 }
