@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
+use Cake\Event\EventInterface;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
@@ -12,6 +13,7 @@ use Cake\Validation\Validator;
  * Articles Model
  *
  * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
+ * @property \App\Model\Table\LikesTable&\Cake\ORM\Association\HasMany $Likes
  *
  * @method \App\Model\Entity\Article newEmptyEntity()
  * @method \App\Model\Entity\Article newEntity(array $data, array $options = [])
@@ -47,6 +49,11 @@ class ArticlesTable extends Table
             'foreignKey' => 'user_id',
             'joinType' => 'INNER',
         ]);
+
+        $this->hasMany('Likes', [
+            'foreignKey' => 'article_id',
+            'cascadeCallbacks' => true,
+        ]);
     }
 
     /**
@@ -71,16 +78,6 @@ class ArticlesTable extends Table
             ->scalar('body')
             ->allowEmptyString('body');
 
-        $validator
-            ->dateTime('created_at')
-            ->requirePresence('created_at', 'create')
-            ->notEmptyDateTime('created_at');
-
-        $validator
-            ->dateTime('updated_at')
-            ->requirePresence('updated_at', 'create')
-            ->notEmptyDateTime('updated_at');
-
         return $validator;
     }
 
@@ -96,5 +93,20 @@ class ArticlesTable extends Table
         $rules->add($rules->existsIn('user_id', 'Users'), ['errorField' => 'user_id']);
 
         return $rules;
+    }
+
+    /**
+     * @param EventInterface $event
+     * @param $entity
+     * @param $options
+     */
+    public function beforeSave(EventInterface $event, $entity, $options)
+    {
+        if ($entity->isNew() && !$entity->created_at && !$entity->updated_at) {
+            $entity->created_at = new \DateTime();
+            $entity->updated_at = new \DateTime();
+        } else {
+            $entity->updated_at = new \DateTime();
+        }
     }
 }

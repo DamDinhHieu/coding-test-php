@@ -160,6 +160,30 @@ class ArticlesController extends AppController
         $this->viewBuilder()->setOption('serialize', ['message']);
     }
 
+    public function like($id = null) {
+        $user = $this->Authentication->getIdentity();
+
+        // Check exist article by id
+        $article = $this->Articles->get($id);
+
+        // Check exist like by id
+        $liked = $this->Articles->Likes->find('all')->where(['article_id' => $article->id, 'user_id' => $user->id,])->first();
+
+        if ($liked) {
+            $message = 'You liked this article before.';
+            $this->set('message', $message);
+            $this->viewBuilder()->setOption('serialize', ['message']);
+            return;
+        }
+
+        // Like article
+        $like = $this->Articles->Likes->newEntity(['article_id' => $article->id, 'user_id' => $user->id,]);
+        $this->Articles->Likes->save($like);
+        $message = 'You have liked this article successfully.';
+        $this->set('message', $message);
+        $this->viewBuilder()->setOption('serialize', ['message']);
+    }
+
     public function beforeFilter(\Cake\Event\EventInterface $event)
     {
         parent::beforeFilter($event);
