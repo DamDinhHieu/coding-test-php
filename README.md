@@ -34,10 +34,16 @@ bin/cake migrations migrate
 
 Set up the sample:
 
-```
-bin/cake migrations seed 
-```
+First run the command
 
+```
+bin/cake migrations seed --seed UsersSeed 
+```
+Next, run the command
+
+```
+bin/cake migrations seed --seed ArticlesSeed  
+```
 
 ### Accessing the Application
 
