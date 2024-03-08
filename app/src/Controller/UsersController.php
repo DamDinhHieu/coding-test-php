@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Cake\Http\Exception\NotFoundException;
 use Cake\Utility\Security;
 use Cake\View\JsonView;
 
@@ -60,8 +61,9 @@ class UsersController extends AppController
 
             $this->set(compact('user'));
             $this->viewBuilder()->setOption('serialize', ['user']);
+        } else {
+            throw new NotFoundException(__('User not found'));
         }
-        // if login failed you can throw an exception, suggested: rrd108/cakephp-json-api-exception
     }
 
     /**

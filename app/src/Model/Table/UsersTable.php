@@ -46,6 +46,9 @@ class UsersTable extends Table
         $this->hasMany('Articles', [
             'foreignKey' => 'user_id',
         ]);
+        $this->hasMany('Likes', [
+            'foreignKey' => 'user_id',
+        ]);
     }
 
     /**
@@ -68,14 +71,9 @@ class UsersTable extends Table
             ->notEmptyString('password');
 
         $validator
-            ->dateTime('created_at')
-            ->requirePresence('created_at', 'create')
-            ->notEmptyDateTime('created_at');
-
-        $validator
-            ->dateTime('updated_at')
-            ->requirePresence('updated_at', 'create')
-            ->notEmptyDateTime('updated_at');
+            ->scalar('token')
+            ->maxLength('token', 255)
+            ->allowEmptyString('token');
 
         return $validator;
     }

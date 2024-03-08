@@ -22,13 +22,13 @@ class UsersSeed extends AbstractSeed
     {
         $data = [
             [
-                'email'    => 'admin@vti.com.vn',
+                'email'    => 'admin@vti.com',
                 'password' => '$2y$10$hnbtgN/koVFPD5I.8l777.ZhHIHhO6VUygGdxGnufAAB7z/GdO8ZG',
                 'created_at' => '2024-03-07 16:12:11',
                 'updated_at' => '2024-03-07 16:12:11',
             ],
             [
-                'email'    => 'user@vti.com.vn',
+                'email'    => 'user@vti.com',
                 'password' => '$2y$10$hnbtgN/koVFPD5I.8l777.ZhHIHhO6VUygGdxGnufAAB7z/GdO8ZG',
                 'created_at' => '2024-03-07 16:12:11',
                 'updated_at' => '2024-03-07 16:12:11',
