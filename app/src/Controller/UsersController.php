@@ -106,4 +106,51 @@ class UsersController extends AppController
         parent::beforeFilter($event);
         $this->Authentication->allowUnauthenticated(['login', 'index']);
     }
+
+    public function flow($following_id){
+        $user = $this->Authentication->getIdentity();
+
+        //check exist flow
+        $flowed = $this->Users->FlowUsers->find('all')->where(['follower_id' => $user->id, 'following_id' => $following_id,])->first();
+
+        if($flowed){
+            $message = 'You flowed this account before.';
+            $this->set('message', $message);
+            $this->viewBuilder()->setOption('serialize', ['message']);
+            return;
+        }
+
+        // flow account
+        $flow = $this->Users->FlowUsers->newEntity(['follower_id' => $user->id, 'following_id' => $following_id,]);
+        $this->Users->FlowUsers->save($flow);
+        $message = 'You have flowed this account successfully.';
+        $this->set('message', $message);
+        $this->viewBuilder()->setOption('serialize', ['message']);
+
+    }
+
+    public function removefl($following_id){
+        $user = $this->Authentication->getIdentity();
+
+        //check exist flow
+        $flowed = $this->Users->FlowUsers->find('all')->where(['follower_id' => $user->id, 'following_id' => $following_id,])->first();
+
+        if($flowed){
+            $this->Users->FlowUsers->delete($flowed);
+            $message = 'You have successfully unfollowed this account.';
+        } else {
+            $message = 'You do not follow this account yet.';
+        }
+        $this->set('message', $message);
+        $this->viewBuilder()->setOption('serialize', ['message']);
+    }
+
+    public function listfl(){
+        $user = $this->Authentication->getIdentity();
+
+        $list = $this->Users->FlowUsers->find('all')->where(['following_id' => $user->id,])->all();
+
+        $this->set(compact('list'));
+        $this->viewBuilder()->setOption('serialize', ['list']);
+    }
 }

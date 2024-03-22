@@ -12,6 +12,7 @@ use Cake\Validation\Validator;
  * Users Model
  *
  * @property \App\Model\Table\ArticlesTable&\Cake\ORM\Association\HasMany $Articles
+ * @property \App\Model\Table\ArticlesTable&\Cake\ORM\Association\HasMany $FlowUsers
  *
  * @method \App\Model\Entity\User newEmptyEntity()
  * @method \App\Model\Entity\User newEntity(array $data, array $options = [])
@@ -48,6 +49,12 @@ class UsersTable extends Table
         ]);
         $this->hasMany('Likes', [
             'foreignKey' => 'user_id',
+        ]);
+        $this->hasMany('FlowUsers', [
+            'foreignKey' => 'follower_id',
+        ]);
+        $this->hasMany('FlowUsers', [
+            'foreignKey' => 'following_id',
         ]);
     }
 
